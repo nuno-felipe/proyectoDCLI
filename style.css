@@ -1,0 +1,46 @@
+*{
+    margin:0 auto;
+    padding: 0;
+}
+.ejercicios{
+    background-color: hsl(340, 57%, 64%,50%);
+    width: 80%;
+
+
+
+}
+.ejercicios>*{
+    width: 100%;
+    padding: 1em;
+    display: flex;
+    flex-direction: row;
+
+}
+
+.divLista{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+.divLista li{
+    list-style: none;
+}
+
+
+
+
+.correcto{
+    border: none;
+    border-bottom: 5px solid green;
+}
+.incorrecto{
+    border: none;
+    border-bottom: 5px solid red;
+}
+.completo{
+    
+    color: green;
+    text-decoration:line-through;
+    list-style: none;
+}
+
