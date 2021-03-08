@@ -1,18 +1,32 @@
 window.addEventListener('load',function(){
+    //variables
+    //colores
     var botonSeleccionarColor=document.getElementById('seleccionar');
     var inputSeleccionarColor=document.getElementById('colorHex');
+    //lista
     var inputLista=document.querySelector(".listaInput");
     var botonLista=document.getElementsByClassName('listaBoton')[0];
     var listaUl=document.querySelector('.listaUl');
+    //añonuevo
+    var diasId = document.getElementById("dias");
+    var horasId = document.getElementById("horas");
+    var minutosId = document.getElementById("minutos");
+    var segundosId = document.getElementById("segundos");
+    var anoNuevo = "01 Jan 2022";
+    //nombre
+    var nombreImput = document.getElementById("inputNombre");
+    var nombreBoton = document.getElementById("btnNombre");
+    var formasDiv = document.getElementById("formasDiv");
 
 
-
+    //addEventListeners
     inputSeleccionarColor.addEventListener('keyup',comprobarColor);
     botonSeleccionarColor.addEventListener('click',cambiarColor,true);
     botonLista.addEventListener('click',anadirLista);
+    nombreBoton.addEventListener('click',formasNombre);
 
 
-
+    //funciones
     function comprobarColor(){
         let regEx=new RegExp('^#([a-fA-F0-9]{6}|[a-fA-F0-9]{3})$');
         if(regEx.test(this.value)){
@@ -26,64 +40,74 @@ window.addEventListener('load',function(){
             document.getElementsByTagName("body")[0].style["backgroundColor"]=inputSeleccionarColor.value;
         }
     }
+    //--
     function borrarLista(){
         this.parentElement.remove();
     }
     function listaCompleta(){
         this.parentElement.className='completo';
     }
-    
+
     function anadirLista(e){
         e.preventDefault();//el boton está dentro de un form y con preventDafualt() evitamos que se ejecute el form 
-        var contenedorLista = document.createElement('div');
-        contenedorLista.className="divLista";
-        var listaLi = document.createElement('li');
-        listaLi.innerText=inputLista.value;
-        contenedorLista.appendChild(listaLi);
-        var botonCompleto=document.createElement('button');
-        botonCompleto.innerText='ok';
-        var botonBorrar=document.createElement('button');
-        botonBorrar.innerText='Borrar';
-        contenedorLista.appendChild(botonCompleto);
-        contenedorLista.appendChild(botonBorrar);
-        listaUl.appendChild(contenedorLista);
-
-        botonBorrar.addEventListener('click',borrarLista);
-        botonCompleto.addEventListener('click',listaCompleta);
-        inputLista.value='';
+        if(inputLista.value!=""){
+            var contenedorLista = document.createElement('div');
+            var listaLi = document.createElement('li');
+            var botonCompleto=document.createElement('button');
+            var botonBorrar=document.createElement('button');
+            contenedorLista.className="divLista";
+            listaLi.innerText=inputLista.value;
+            contenedorLista.appendChild(listaLi);
+            botonCompleto.innerText='ok';
+            botonBorrar.innerText='Borrar';
+            contenedorLista.appendChild(botonCompleto);
+            contenedorLista.appendChild(botonBorrar);
+            listaUl.appendChild(contenedorLista);
+            botonBorrar.addEventListener('click',borrarLista);
+            botonCompleto.addEventListener('click',listaCompleta);
+            inputLista.value='';
+        }
     }
-    const daysEl = document.getElementById("days");
-const hoursEl = document.getElementById("hours");
-const minsEl = document.getElementById("mins");
-const secondsEl = document.getElementById("seconds");
+    //--
+    function cuentaAtras() {
+        var dataAnoNuevo = new Date(anoNuevo);
+        var diahoy = new Date();
+        var totalsegundos = (dataAnoNuevo - diahoy) / 1000;
+        var days = Math.floor(totalsegundos / 3600 / 24);
+        var hours = Math.floor(totalsegundos / 3600) % 24;
+        var mins = Math.floor(totalsegundos / 60) % 60;
+        var seconds = Math.floor(totalsegundos) % 60;
+        diasId.innerHTML = days;
+        horasId.innerHTML = hours;
+        minutosId.innerHTML =mins;
+        segundosId.innerHTML = seconds;
+    }
+    cuentaAtras();
+    setInterval(cuentaAtras, 1000);//cada segundo se ejecuta la funcion cuenta atrás
+    //--
+    function formasNombre(){
+        var nombre=nombreImput.value;
+        while (formasDiv.hasChildNodes()) {  
+            formasDiv.removeChild(formasDiv.firstChild);
+        }
+        if(nombre==''){
+            alert("El campo está vacio");
+        }else{
+            let nombreReves=nombre.split("").reverse().join("");
+            let letrasSeparadas=nombre.split("").join("-");
+            var parrafo=document.createElement('p');
+            parrafo.innerText="Nombre al revés: "+nombreReves;
+            formasDiv.appendChild(parrafo);
+            var parrafo=document.createElement('p');
+            parrafo.innerText="Letras separadas: "+letrasSeparadas;
+            formasDiv.appendChild(parrafo);
+        }
+        nombreImput.value='';
 
-const newYears = "01 Jan 2022";
+    }
 
-function countdown() {
-    const newYearsDate = new Date(newYears);
-    const currentDate = new Date();
-
-    const totalSeconds = (newYearsDate - currentDate) / 1000;
-
-    const days = Math.floor(totalSeconds / 3600 / 24);
-    const hours = Math.floor(totalSeconds / 3600) % 24;
-    const mins = Math.floor(totalSeconds / 60) % 60;
-    const seconds = Math.floor(totalSeconds) % 60;
-
-    daysEl.innerHTML = days;
-    hoursEl.innerHTML = formatTime(hours);
-    minsEl.innerHTML = formatTime(mins);
-    secondsEl.innerHTML = formatTime(seconds);
-}
-
-function formatTime(time) {
-    return time < 10 ? `0${time}` : time;
-}
-
-// initial call
-countdown();
-
-setInterval(countdown, 1000);
+    
+    
 
 
         
